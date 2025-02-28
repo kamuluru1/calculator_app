@@ -20,12 +20,53 @@ class CalculatorHomePage extends StatefulWidget {
 
 class _CalculatorHomePageState extends State<CalculatorHomePage> {
   String displayText = '';
+  double? firstOperand;
+  double? secondOperand;
+  String? operator;
+
   void buttonPressed(String value) {
     setState(() {
       if (value == 'C') {
         displayText = '';
+        firstOperand = null;
+        secondOperand = null;
+        operator = null;
       }
-      else if (value != '+' && value != '-' && value != '*' && value != '/' && value != '=') {
+      else if (value == '+' || value == '-' || value == '*' || value == '/') {
+        if (displayText.isNotEmpty) {
+          firstOperand = double.tryParse(displayText);
+          operator = value;
+          displayText = '';
+        }
+      }
+      else if (value == '=') {
+        if (operator != null && firstOperand != null && displayText.isNotEmpty) {
+          secondOperand = double.tryParse(displayText);
+          double result = 0;
+          if (operator == '+') {
+            result = firstOperand! + secondOperand!;
+          } else if (operator == '-') {
+            result = firstOperand! - secondOperand!;
+          } else if (operator == '*') {
+            result = firstOperand! * secondOperand!;
+          } else if (operator == '/') {
+            if (secondOperand == 0) {
+              displayText = 'Error';
+              firstOperand = null;
+              secondOperand = null;
+              operator = null;
+              return;
+            } else {
+              result = firstOperand! / secondOperand!;
+            }
+          }
+          displayText = result.toString();
+          firstOperand = null;
+          secondOperand = null;
+          operator = null;
+        }
+      }
+      else {
         displayText += value;
       }
     });
@@ -58,7 +99,6 @@ class _CalculatorHomePageState extends State<CalculatorHomePage> {
       ),
       body: Column(
         children: [
-          // Display area
           Container(
             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 24),
             alignment: Alignment.centerRight,
@@ -67,7 +107,6 @@ class _CalculatorHomePageState extends State<CalculatorHomePage> {
               style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
             ),
           ),
-          // Buttons layout
           Expanded(
             child: Column(
               children: <Widget>[
@@ -111,7 +150,6 @@ class _CalculatorHomePageState extends State<CalculatorHomePage> {
     );
   }
 }
-
 
 
 
