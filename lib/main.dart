@@ -20,6 +20,17 @@ class CalculatorHomePage extends StatefulWidget {
 
 class _CalculatorHomePageState extends State<CalculatorHomePage> {
   String displayText = '';
+  void buttonPressed(String value) {
+    setState(() {
+      if (value == 'C') {
+        displayText = '';
+      }
+      else if (value != '+' && value != '-' && value != '*' && value != '/' && value != '=') {
+        displayText += value;
+      }
+    });
+  }
+
   Widget buildButton(String text, Color color) {
     return Expanded(
       child: Container(
@@ -29,8 +40,7 @@ class _CalculatorHomePageState extends State<CalculatorHomePage> {
             backgroundColor: color,
             padding: EdgeInsets.all(24),
           ),
-          onPressed: () {
-          },
+          onPressed: () => buttonPressed(text),
           child: Text(
             text,
             style: TextStyle(fontSize: 24),
@@ -101,6 +111,7 @@ class _CalculatorHomePageState extends State<CalculatorHomePage> {
     );
   }
 }
+
 
 
 
